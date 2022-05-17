@@ -34,11 +34,13 @@ class NoticiaController extends AbstractController
         $noticia->setTitulo($titulo);
         $noticia->setMedio($medio);
         $noticia->setFecha($fecha);
-        $noticia->setArchivo($file->getClientOriginalName());
+        
+        if($file) {
+            $noticia = $uploader->upload($file, $noticia);
+        }
+
         $entityManager->persist($noticia);
         $entityManager->flush();
-
-        //$uploader->upload($uploadDir, $file, $filename);
 
         return $this->redirectToRoute('app_dashboard_index');
     }

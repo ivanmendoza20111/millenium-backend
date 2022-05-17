@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Noticia;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
@@ -14,13 +16,14 @@ class FileUploader
         $this->logger = $logger;
     }
 
-    public function upload($uploadDir, $file, $filename)
+    public function upload(UploadedFile $file, Noticia $noticia)
     {
         try {
-
-            $file->move($uploadDir, $filename);
+            $path = "Noticias/archivos";
+            $noticia->setPath($path);
+            $noticia->setFile($file);
+            return $noticia;
         } catch (FileException $e){
-
             $this->logger->error('failed to upload image: ' . $e->getMessage());
             throw new FileException('Failed to upload file');
         }
