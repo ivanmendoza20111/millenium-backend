@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/my-login.css') }}">
+{% endblock %}
+
+{% block bodyClass%} 
+    class="my-login-page"
+{% endblock %}
+
+{% block body %}
+    <section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-md-center h-100">
+				<div class="card-wrapper">
+					<br/>
+					<center><img src="img/logo.svg" width="30%" alt="logo"></center>
+					<div class="card fat">
+						<div class="card-body">
+							<h4 class="card-title text-center">Regístrate</h4>
+                              {{ form_start(registrationForm, {attr: {'class': 'my-login-validation'}}) }}
+				
+								<div class="form-group">
+									<label for="name">Nombres</label>
+                                    {{ form_widget(registrationForm.nombres, { 'attr': { 'class': 'form-control', 'autofocus': true, 'required': true} }) }}
+								</div>
+
+								<div class="form-group">
+									<label for="email">E-Mail Address</label>
+                                    {{ form_widget(registrationForm.email, { 'attr': { 'class': 'form-control', 'required': true}} ) }}
+								</div>
+
+								<div class="form-group">
+									<label for="password">Password</label>
+									{{ form_widget(registrationForm.plainPassword, { 'attr': { 'class': 'form-control', 'required': true}}) }}
+								</div>
+
+								{% if not registrationForm.vars.valid %}
+									<ul>
+										{# Loop through every form item #}
+										{% for child in registrationForm.children %}
+											{# Display the errors of the form item #}
+											{% for error in child.vars.errors %}
+												<li class="text-danger">{{error.message}}</li>
+											{% endfor %}
+										{% endfor %}
+									</ul>
+								{% endif %}
+
+
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary btn-block">
+										Guardar
+									</button>
+								</div>
+								<div class="mt-4 text-center">
+									Ya tienes una cuenta? <a href="{{ path('app_login') }}" >Login</a>
+								</div>
+							
+                            {{ form_end(registrationForm) }}
+                           
+						</div>
+					</div>
+					<div class="footer">
+						Copyright &copy; {{ "now"|date('Y') }} &mdash; Iván Mendoza
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
