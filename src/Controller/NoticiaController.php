@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Entity\Noticia;
 use App\Form\NoticiaType;
 use App\Repository\NoticiaRepository;
+use App\Service\FileUploader;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FileUploadError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,34 +20,27 @@ use Symfony\Component\Routing\Annotation\Route;
 class NoticiaController extends AbstractController
 {
     /**
-     * @Route("/", name="app_noticia_index", methods={"GET"})
+     * @Route("/new", name="app_noticia_new", methods={"POST"})
      */
-    public function index(NoticiaRepository $noticiaRepository): Response
+    public function new(Request $request,EntityManagerInterface $entityManager, FileUploader $uploader): Response
     {
-        return $this->render('noticia/index.html.twig', [
-            'noticias' => $noticiaRepository->findAll(),
-        ]);
-    }
+        $titulo = $request->get('titulo') ?? '';
+        $medio = $request->get('medio') ?? '';
+        $fecha = new DateTime($request->get('fecha')) ?? new DateTime();
+        $file = $request->files->get('archivo') ?? null;
 
-    /**
-     * @Route("/new", name="app_noticia_new", methods={"GET", "POST"})
-     */
-    public function new(Request $request, NoticiaRepository $noticiaRepository): Response
-    {
-        $noticium = new Noticia();
-        $form = $this->createForm(NoticiaType::class, $noticium);
-        $form->handleRequest($request);
+        $noticia = new Noticia();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $noticiaRepository->add($noticium, true);
+        $noticia->setTitulo($titulo);
+        $noticia->setMedio($medio);
+        $noticia->setFecha($fecha);
+        $noticia->setArchivo($file->getClientOriginalName());
+        $entityManager->persist($noticia);
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_noticia_index', [], Response::HTTP_SEE_OTHER);
-        }
+        //$uploader->upload($uploadDir, $file, $filename);
 
-        return $this->renderForm('noticia/new.html.twig', [
-            'noticium' => $noticium,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_dashboard_index');
     }
 
     /**
@@ -54,37 +51,5 @@ class NoticiaController extends AbstractController
         return $this->render('noticia/show.html.twig', [
             'noticium' => $noticium,
         ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="app_noticia_edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, Noticia $noticium, NoticiaRepository $noticiaRepository): Response
-    {
-        $form = $this->createForm(NoticiaType::class, $noticium);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $noticiaRepository->add($noticium, true);
-
-            return $this->redirectToRoute('app_noticia_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('noticia/edit.html.twig', [
-            'noticium' => $noticium,
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="app_noticia_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Noticia $noticium, NoticiaRepository $noticiaRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$noticium->getId(), $request->request->get('_token'))) {
-            $noticiaRepository->remove($noticium, true);
-        }
-
-        return $this->redirectToRoute('app_noticia_index', [], Response::HTTP_SEE_OTHER);
     }
 }

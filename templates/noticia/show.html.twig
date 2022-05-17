@@ -3,36 +3,13 @@
 {% block title %}Noticia{% endblock %}
 
 {% block body %}
-    <h1>Noticia</h1>
+    {% include 'nav.html.twig' %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ noticium.id }}</td>
-            </tr>
-            <tr>
-                <th>Titulo</th>
-                <td>{{ noticium.titulo }}</td>
-            </tr>
-            <tr>
-                <th>Medio</th>
-                <td>{{ noticium.medio }}</td>
-            </tr>
-            <tr>
-                <th>Fecha</th>
-                <td>{{ noticium.fecha ? noticium.fecha|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Archivo</th>
-                <td>{{ noticium.archivo }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_noticia_index') }}">back to list</a>
-
-    <a href="{{ path('app_noticia_edit', {'id': noticium.id}) }}">edit</a>
-
-    {{ include('noticia/_delete_form.html.twig') }}
+    <div class="container-fluid">
+        <h1>{{ noticium.titulo }}</h1>
+        <h3>Fecha: {{ noticium.fecha ? noticium.fecha|date('d/m/Y') : '' }}</h3>
+        <h3>Medio: {{ noticium.medio }}</h3>
+        <h3>Archivos: </h3>
+        <a href="{{ path('app_dashboard_index') }}">Regresar al Dashboard</a>
+    </div>
 {% endblock %}
