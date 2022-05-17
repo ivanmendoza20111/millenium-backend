@@ -26,7 +26,7 @@
                                     <tr>
                                         <td>{{ user.nombres }}</td>
                                         <td>{{ user.email }}</td>
-                                        <td><a class="btn btn-primary btn-sm" href="#">Aceptar</a>&nbsp; <a class="btn btn-danger btn-sm" href="#">Rechazar</a></td>
+                                        <td><a class="btn btn-primary btn-sm" href="{{ path('aceptar_usuario', {user: user.id}) }}">Aceptar</a>&nbsp; <a class="btn btn-danger btn-sm" href="{{ path('rechazar_usuario', {user: user.id}) }}">Rechazar</a></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

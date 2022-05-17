@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,5 +43,31 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/aceptar/{user}", name="aceptar_usuario")
+     */
+    public function aceptarUser(User $user, EntityManagerInterface $entityManager) {
+        try{
+            $user->setAprobados(true);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_dashboard_index');
+        } catch(Exception $ex) {
+            throw new \LogicException('Error en la Base de Datos');
+        }
+    }
+
+    /**
+     * @Route("/rechazar/{user}", name="rechazar_usuario")
+     */
+    public function rechazarUser(User $user, EntityManagerInterface $entityManager) {
+        try{
+            $user->setActivo(false);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_dashboard_index');
+        } catch(Exception $ex) {
+            throw new \LogicException('Error en la Base de Datos');
+        }
     }
 }
