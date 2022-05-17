@@ -10,8 +10,10 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FileUploadError;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -53,5 +55,23 @@ class NoticiaController extends AbstractController
         return $this->render('noticia/show.html.twig', [
             'noticium' => $noticium,
         ]);
+    }
+
+    /**
+     * @Route("/download/{id}", name="app_noticia_download", methods={"GET"})
+     */
+    public function downloadFile(Noticia $noticium) {
+        $path = $noticium->getPath().'/'.$noticium->getFilename();
+
+        $response = new BinaryFileResponse($path);
+            $response->trustXSendfileTypeHeader();
+            $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                basename($path),
+                iconv('UTF-8', 'ASCII//TRANSLIT', basename($path))
+        );
+
+        return $response;
     }
 }

@@ -19,7 +19,7 @@ class FileUploader
     public function upload(UploadedFile $file, Noticia $noticia)
     {
         try {
-            $path = "Noticias/archivos";
+            $path = rtrim($_ENV['data_dir'], "/").'/noticias/archivos';
             $noticia->setPath($path);
             $noticia->setFile($file);
             return $noticia;
