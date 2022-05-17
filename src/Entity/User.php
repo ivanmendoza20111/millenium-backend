@@ -37,6 +37,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $aprobados;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : 0})
+     */
+    private $activo;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -49,6 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct() {
         $this->aprobados = false;
+        $this->activo = true;
         $this->roles = ["ROLE_USER"];
     }
 
@@ -161,6 +167,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAprobados(bool $aprobados): self
     {
         $this->aprobados = $aprobados;
+
+        return $this;
+    }
+
+    public function getActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): self
+    {
+        $this->activo = $activo;
 
         return $this;
     }

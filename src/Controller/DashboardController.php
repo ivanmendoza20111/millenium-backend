@@ -19,9 +19,11 @@ class DashboardController extends AbstractController
      */
     public function index(NoticiaRepository $noticiaRepository, UserRepository $userRepository): Response
     {
+        $user = $userRepository->findBy(['activo' => true, 'aprobados'=> false]);
+
         return $this->render('dashboard/index.html.twig', [
             'noticias' => $noticiaRepository->findAll(),
-            'user' => $userRepository->findAll()
+            'users' => $user
         ]);
     }
 }

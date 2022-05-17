@@ -5,5 +5,71 @@
 {% block body %}
     {% include 'nav.html.twig' %}
 
-    
+    <h1 class="text-center" >DASHBOARD</h1>
+    <br/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-center">Aprobar Usuarios</h4>
+                        <table class="table table-sm" id="usuarios">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.nombres }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td><a class="btn btn-primary btn-sm" href="#">Aceptar</a>&nbsp; <a class="btn btn-danger btn-sm" href="#">Rechazar</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-center">Noticias</h4>
+                        <table class="table table-sm" id="noticias">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for noticia in noticias %}
+                                    <tr>
+                                        <td>{{ noticia.titulo }}</td>
+                                        <td><a class="btn btn-primary btn-sm" href="#">Ver Más</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br/>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Crear Noticias</h4>
+                
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ asset('js/dashboard/index.js')}}"></script>
 {% endblock %}
