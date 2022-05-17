@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Noticia;
 
 use App\Entity\Noticia;
 use App\Form\NoticiaType;
