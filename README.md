@@ -14,6 +14,8 @@ Aplicación desarrollada en Symfony (Framewrok PHP)
 - [PHP](https://www.php.net/downloads.php) Download PHP 7.4.29
 - [MYSQL](https://www.mysql.com/downloads/) Database
 
+### Antes de realizar estos pasos debe tener todas las dependencias instaladas y el proyecto Millenium-Docker clonado.
+
 #### Clonar repositorio dentro de millenium-docker con nombre backend
 
 **HTTPS:**
